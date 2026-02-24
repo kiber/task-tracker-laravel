@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
@@ -66,13 +70,28 @@ class AuthController extends Controller
         return back()->withErrors(['email' => 'These credentials do not match our records.']);
     }
 
-    public function register()
+    public function register(RegisterRequest $request)
     {
+        $validatedData = $request->validated();
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+        ]);
 
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
+        return redirect('/');
     }
 }
