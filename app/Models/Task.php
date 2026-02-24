@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property string $uuid
  * @property int $user_id
  * @property int|null $category_id
  * @property string $title
@@ -36,6 +38,8 @@ use Illuminate\Support\Carbon;
  */
 class Task extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'user_id',
         'category_id',
@@ -44,6 +48,16 @@ class Task extends Model
         'task_date',
         'completed_at',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
 
     public function user(): BelongsTo
     {
