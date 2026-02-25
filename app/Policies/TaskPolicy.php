@@ -1,0 +1,18 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Policies;
+
+use App\Models\Task;
+use App\Models\User;
+
+class TaskPolicy
+{
+    /**
+     * Determine whether the user can manage the model.
+     */
+    public function manage(User $user, Task $task): bool
+    {
+        return $user->id === $task->user_id;
+    }
+}

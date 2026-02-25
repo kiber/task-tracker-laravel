@@ -52,7 +52,7 @@ class CategoryController extends Controller
 //            abort(403);
 //        }
 
-        return view('categories.edit', ['category' => $category]);
+        return view('categories.edit', ['category' => $category->toResource()->resolve()]);
     }
 
     /**

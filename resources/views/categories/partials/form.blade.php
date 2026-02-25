@@ -9,7 +9,7 @@
         class="block mt-1 w-full"
         type="text"
         name="name"
-        :value="old('name', $category?->name)"
+        :value="old('name', $category['name'])"
         required
         autofocus
         autocomplete="off"
