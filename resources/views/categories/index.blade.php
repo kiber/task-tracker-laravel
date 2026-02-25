@@ -5,7 +5,7 @@
                 {{ __('Categories') }}
             </h2>
 
-            @if ($categories->count() > 0)
+            @if ($categories)
             <a
                 href="{{ route('categories.create') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
@@ -25,7 +25,7 @@
             @endif
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                @if ($categories->count() > 0)
+                @if (count($categories) > 0)
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-900/40">
@@ -40,20 +40,20 @@
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
                             @foreach ($categories as $category)
                                 <tr>
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $category['name'] }}</td>
 {{--                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category->description ?: __('No description provided.') }}</td>--}}
-                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category->created_at?->format('M d, Y h:i A') ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category->updated_at?->format('M d, Y h:i A') ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['created_at'] ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['updated_at'] ?? '-' }}</td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
                                             <a
-                                                href="{{ route('categories.edit', $category) }}"
+                                                href="{{ route('categories.edit', ['category' => $category['id']]) }}"
                                                 class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
                                             >
                                                 {{ __('Edit') }}
                                             </a>
 
-                                            <form method="POST" action="{{ route('categories.destroy', $category) }}" onsubmit="return confirm('{{ __('Delete this category?') }}');">
+                                            <form method="POST" action="{{ route('categories.destroy', ['category' => $category['id']]) }}" onsubmit="return confirm('{{ __('Delete this category?') }}');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-danger-button>
@@ -81,7 +81,7 @@
             </div>
 
             <div>
-                {{ $categories->links() }}
+                {{ $links() }}
             </div>
         </div>
     </div>

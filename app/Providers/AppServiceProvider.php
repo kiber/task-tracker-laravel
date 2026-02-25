@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
@@ -78,8 +79,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Log DB query for debugging
-        DB::listen(function (QueryExecuted $query) {
-            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
-        });
+//        DB::listen(function (QueryExecuted $query) {
+//            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
+//        });
+
+        // To remove parent data from JSON objects
+//        JsonResource::withoutWrapping();
     }
 }

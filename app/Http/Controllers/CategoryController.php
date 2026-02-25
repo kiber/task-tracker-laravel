@@ -18,7 +18,10 @@ class CategoryController extends Controller
     {
         $categories = $request->user()->categories()->latest()->paginate();
 
-        return view('categories.index', ['categories' => $categories]);
+        return view('categories.index', [
+            'categories' => $categories->toResourceCollection()->resolve(),
+            'links' => fn() => $categories->links()
+        ]);
     }
 
     /**
