@@ -27,7 +27,7 @@ class UpdateTaskRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'category_id' => ['nullable'],
-            'task_date' => ['nullable', 'date'],
+            'task_date' => ['required', 'date'],
         ];
     }
 }

@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $category_id
  * @property string $title
  * @property string|null $description
- * @property Carbon|null $task_date
+ * @property Carbon $task_date
  * @property Carbon|null $completed_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -43,6 +43,7 @@ class Task extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'recurring_task_id',
         'title',
         'description',
         'task_date',
@@ -67,6 +68,11 @@ class Task extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function recurringTask(): BelongsTo
+    {
+        return $this->belongsTo(RecurringTask::class);
     }
 
     protected function casts(): array
