@@ -28,6 +28,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $notifications_count
  * @property-read Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read Collection<int, \App\Models\RecurringTask> $recurringTasks
+ * @property-read int|null $recurring_tasks_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -87,6 +89,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function recurringTasks(): HasMany
+    {
+        return $this->hasMany(RecurringTask::class);
     }
 
     /**

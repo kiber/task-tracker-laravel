@@ -19,6 +19,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RecurringTask> $recurringTasks
+ * @property-read int|null $recurring_tasks_count
  * @property-read User $user
  * @method static Builder<static>|Category newModelQuery()
  * @method static Builder<static>|Category newQuery()
@@ -56,5 +58,10 @@ class Category extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function recurringTasks(): HasMany
+    {
+        return $this->hasMany(RecurringTask::class);
     }
 }
