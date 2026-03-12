@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Database\Seeders;
 
@@ -21,11 +22,18 @@ class DatabaseSeeder extends Seeder
 //            'email' => 'test@example.com',
 //        ]);
 
-        for ($i = 1; $i <= 20; $i++) {
-            Category::create([
-                'name' => 'Category ' . $i,
-                'user_id' => 2,
-            ]);
-        }
+//        for ($i = 1; $i <= 20; $i++) {
+//            Category::create([
+//                'name' => 'Category ' . $i,
+//                'user_id' => 2,
+//            ]);
+//        }
+
+        $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            TaskSeeder::class,
+            RecurringTaskSeeder::class,
+        ]);
     }
 }
