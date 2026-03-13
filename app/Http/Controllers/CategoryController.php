@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Category\CreateCategory;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
@@ -35,9 +36,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request, CreateCategory $createCategory)
     {
-        $request->user()->categories()->create($request->validated());
+        $createCategory->execute($request->validated(), $request->user());
 
         return to_route('categories.index')->with('success', 'Category created successfully.');
     }

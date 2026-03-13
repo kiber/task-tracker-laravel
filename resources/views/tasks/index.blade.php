@@ -48,7 +48,7 @@
                         name="category_id"
                         :label="__('Category')"
                         :selected="$filters['category_id'] ?? ''"
-                        :options="$categories->pluck('name', 'uuid')->prepend(__('All categories'), '')->all()"
+                        :options="$categories"
                     />
 
                     <div>

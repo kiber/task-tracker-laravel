@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Category\GetCategories;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
@@ -13,6 +14,10 @@ use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
+    public function __construct(
+        private GetCategories $getCategories
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +32,9 @@ class TaskController extends Controller
             }
         }
 
-        $categories = $user->categories()->orderBy('name')->get();
+        $categories = $this->getCategories->execute($user->id);
+        array_unshift($categories, __('All categories'));
+
         $tasksQuery = $user->tasks()
             ->with('category')
             ->when($request->status === 'completed', fn (Builder $query) => $query->whereNotNull('completed_at'))
@@ -51,7 +58,7 @@ class TaskController extends Controller
      */
     public function create(Request $request)
     {
-        $categories = $request->user()->categories()->orderBy('name')->pluck('name', 'uuid')->toArray();
+        $categories = $this->getCategories->execute($request->user()->id);
 
         return view('tasks.create', ['categories' => $categories]);
     }
@@ -82,7 +89,7 @@ class TaskController extends Controller
     {
         $task->load('category');
         $task = $task->toResource()->resolve();
-        $categories = $request->user()->categories()->orderBy('name')->pluck('name', 'uuid')->toArray();
+        $categories = $this->getCategories->execute($request->user()->id);
 
         return view('tasks.edit', ['task' => $task, 'categories' => $categories]);
     }
