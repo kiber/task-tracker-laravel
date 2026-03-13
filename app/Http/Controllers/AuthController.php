@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Auth\RegisterUser;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -70,16 +71,9 @@ class AuthController extends Controller
         return back()->withErrors(['email' => 'These credentials do not match our records.']);
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request, RegisterUser $registerUser)
     {
-        $validatedData = $request->validated();
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-
-        event(new Registered($user));
+        $user = $registerUser->execute($request->validated());
 
         Auth::login($user);
 
