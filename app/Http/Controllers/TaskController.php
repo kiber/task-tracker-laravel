@@ -130,6 +130,7 @@ class TaskController extends Controller
             'completed_at' => $isCompleting ? now() : null,
         ]);
 
-        return back()->with('success', $isCompleting ? 'Task marked as completed.' : 'Task marked as incomplete.');
+//        return back()->with('success', $isCompleting ? 'Task marked as completed.' : 'Task marked as incomplete.');
+        return response()->json(['completed' => $isCompleting]);
     }
 }
