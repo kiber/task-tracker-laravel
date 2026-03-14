@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Console\Commands;
@@ -39,17 +40,18 @@ class GenerateRecurringTasks extends Command
 
         $recurringTasksQuery = RecurringTask::query()
 //            ->active()
-            ->where(fn(Builder $query) => $query->whereNull('start_date')->orWhere('start_date', '<=', $targetDate))
-            ->where(fn(Builder $query) => $query->whereNull('end_date')->orWhere('end_date', '>=', $targetDate))
-            ->whereDoesntHave('tasks', fn(Builder $query) => $query->whereDate('task_date', $targetDate));
+            ->where(fn (Builder $query) => $query->whereNull('start_date')->orWhere('start_date', '<=', $targetDate))
+            ->where(fn (Builder $query) => $query->whereNull('end_date')->orWhere('end_date', '>=', $targetDate))
+            ->whereDoesntHave('tasks', fn (Builder $query) => $query->whereDate('task_date', $targetDate));
 
         $totalRecurringTasks = $recurringTasksQuery->count();
-        if (!$totalRecurringTasks) {
+        if (! $totalRecurringTasks) {
             $this->info('No recurring tasks found.');
+
             return self::FAILURE;
         }
 
-        $this->info('Processing ' . $totalRecurringTasks . ' recurring task templates...');
+        $this->info('Processing '.$totalRecurringTasks.' recurring task templates...');
 
         $created = 0;
         $skipped = 0;
@@ -61,12 +63,13 @@ class GenerateRecurringTasks extends Command
                     $insertTasksBatch = [];
                     foreach ($recurringTasks as $recurringTask) {
                         try {
-                            if (!$this->isRecurringTaskDue($recurringTask, $targetDate)) {
+                            if (! $this->isRecurringTaskDue($recurringTask, $targetDate)) {
                                 $skipped++;
+
                                 continue;
                             }
 
-                            $now = new DateTime();
+                            $now = new DateTime;
                             $insertTasksBatch[] = [
                                 'uuid' => (string) Str::uuid7(),
                                 'user_id' => $recurringTask->user_id,
@@ -93,10 +96,10 @@ class GenerateRecurringTasks extends Command
             }
         );
 
-        $this->info('Created ' . $created . ' recurring tasks.');
+        $this->info('Created '.$created.' recurring tasks.');
 
         if ($skipped > 0) {
-            $this->warn('Skipped ' . $created . ' recurring tasks.');
+            $this->warn('Skipped '.$created.' recurring tasks.');
         }
 
         $this->newLine();
@@ -118,7 +121,7 @@ class GenerateRecurringTasks extends Command
     private function isWeeklyRecurringTaskDue(mixed $recurringTask, Carbon $targetDate): bool
     {
         $config = $recurringTask->frequency_config;
-        if (!$config || !isset($config['days']) || !is_array($config['days'])) {
+        if (! $config || ! isset($config['days']) || ! is_array($config['days'])) {
             return false;
         }
 
@@ -128,7 +131,7 @@ class GenerateRecurringTasks extends Command
     private function isMonthlyRecurringTaskDue(mixed $recurringTask, Carbon $targetDate): bool
     {
         $config = $recurringTask->frequency_config;
-        if (!$config || !isset($config['day'])) {
+        if (! $config || ! isset($config['day'])) {
             return false;
         }
 

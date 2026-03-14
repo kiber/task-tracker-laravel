@@ -113,11 +113,11 @@
                                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 group-data-[completed=true]:line-through">{{ \Illuminate\Support\Str::limit($task['description'] ?? '', 80) ?: __('No description') }}</p>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $task['category']['name'] ?? '-' }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $task['task_date'] ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $task['task_date']['display'] ?? '-' }}</td>
                                         <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                                             <x-tasks.status-badge :completed="$task['is_completed']" />
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $task['created_at'] ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $task['created_at']['display'] ?? '-' }}</td>
                                         <td class="px-6 py-4">
                                             <div class="flex flex-wrap items-center justify-end gap-2">
                                                 <a

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -6,15 +7,11 @@ namespace App\Http\Controllers;
 use App\Actions\Auth\RegisterUser;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Validation\ValidationException;
 
-class AuthController extends Controller
+class AuthController
 {
     public function showLoginForm()
     {
@@ -43,16 +40,16 @@ class AuthController extends Controller
      */
     public function __login(LoginRequest $request)
     {
-        $ipThrottleKey = 'login:' . $request->ip();
+        $ipThrottleKey = 'login:'.$request->ip();
         $emailThrottleKey = strtolower($request->input('email'));
 
         if (RateLimiter::tooManyAttempts($ipThrottleKey, 100)) {
-//            throw ValidationException::withMessages(['email' => 'Too many login attempts. Please try again in a few minutes.']);
+            //            throw ValidationException::withMessages(['email' => 'Too many login attempts. Please try again in a few minutes.']);
             return back()->withErrors(['email' => 'Too many login attempts. Please try again in a few minutes.']);
         }
 
         if (RateLimiter::tooManyAttempts($emailThrottleKey, 5)) {
-//            throw ValidationException::withMessages(['email' => 'Too many login attempts. Please try again in a few minutes.']);
+            //            throw ValidationException::withMessages(['email' => 'Too many login attempts. Please try again in a few minutes.']);
             return back()->withErrors(['email' => 'Too many login attempts. Please try again in a few minutes.']);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use SensitiveParameter;
 
-class PasswordResetController extends Controller
+class PasswordResetController
 {
     public function showPasswordResetRequestForm()
     {

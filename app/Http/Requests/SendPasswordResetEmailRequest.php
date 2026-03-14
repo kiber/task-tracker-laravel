@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Requests;
@@ -23,7 +24,7 @@ class SendPasswordResetEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'max:255']
+            'email' => ['required', 'email', 'max:255'],
         ];
     }
 }

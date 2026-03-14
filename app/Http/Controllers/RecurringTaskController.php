@@ -1,19 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Category\ResolveCategory;
 use App\Enums\TaskFrequency;
 use App\Http\Requests\StoreRecurringTaskRequest;
 use App\Http\Requests\UpdateRecurringTaskRequest;
-use App\Models\Category;
 use App\Models\RecurringTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 
-class RecurringTaskController extends Controller
+class RecurringTaskController
 {
+    public function __construct(
+        private readonly ResolveCategory $resolveCategory
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -50,7 +54,7 @@ class RecurringTaskController extends Controller
     public function store(StoreRecurringTaskRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData['category_id'] = $this->resolveCategoryId($request, $request->input('category_id'));
+        $validatedData['category_id'] = $this->resolveCategory->execute($validatedData['category_id'] ?? '', $request->user());
         $validatedData['frequency_config'] = $this->buildFrequencyConfig($validatedData);
 
         unset($validatedData['weekly_days'], $validatedData['monthly_day']);
@@ -82,7 +86,7 @@ class RecurringTaskController extends Controller
     public function update(UpdateRecurringTaskRequest $request, RecurringTask $recurringTask)
     {
         $validatedData = $request->validated();
-        $validatedData['category_id'] = $this->resolveCategoryId($request, $request->input('category_id'));
+        $validatedData['category_id'] = $this->resolveCategory->execute($validatedData['category_id'] ?? '', $request->user());
         $validatedData['frequency_config'] = $this->buildFrequencyConfig($validatedData);
 
         unset($validatedData['weekly_days'], $validatedData['monthly_day']);
@@ -131,22 +135,8 @@ class RecurringTaskController extends Controller
         ];
     }
 
-    private function resolveCategoryId(Request $request, ?string $categoryUuid): ?int
-    {
-        if (!$categoryUuid) {
-            return null;
-        }
-
-        $category = Category::where('uuid', $categoryUuid)->first();
-        if (!$category || $request->user()->cannot('manage', $category)) {
-            throw ValidationException::withMessages(['category_id' => 'The given category id does not exist.']);
-        }
-
-        return $category->id;
-    }
-
     /**
-     * @param array<string, mixed> $validatedData
+     * @param  array<string, mixed>  $validatedData
      * @return array<string, mixed>|null
      */
     private function buildFrequencyConfig(array $validatedData): ?array

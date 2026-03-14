@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Database\Seeders;
@@ -17,17 +18,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+        //        User::factory()->create([
+        //            'name' => 'Test User',
+        //            'email' => 'test@example.com',
+        //        ]);
 
-//        for ($i = 1; $i <= 20; $i++) {
-//            Category::create([
-//                'name' => 'Category ' . $i,
-//                'user_id' => 2,
-//            ]);
-//        }
+        //        for ($i = 1; $i <= 20; $i++) {
+        //            Category::create([
+        //                'name' => 'Category ' . $i,
+        //                'user_id' => 2,
+        //            ]);
+        //        }
 
         $this->call([
             UserSeeder::class,

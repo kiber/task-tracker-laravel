@@ -9,7 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('categories.update', ['category' => $category['id']]) }}" class="space-y-6">
+                    <form method="POST" action="{{ route('categories.update', ['category' => $category['id']]) }}" x-data="{ submitting: false }" @submit="submitting = true" class="space-y-6">
                         @csrf
                         @method('PUT')
 
@@ -23,8 +23,9 @@
                                 {{ __('Cancel') }}
                             </a>
 
-                            <x-primary-button>
-                                {{ __('Update Category') }}
+                            <x-primary-button ::disabled="submitting">
+                                <span x-show="!submitting">{{ __('Update Category') }}</span>
+                                <span x-show="submitting" x-clock>{{ __('Updating...') }}</span>
                             </x-primary-button>
                         </div>
                     </form>

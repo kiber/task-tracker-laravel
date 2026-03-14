@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Resources;
@@ -23,15 +24,15 @@ class TaskResource extends JsonResource
             'id' => $this->uuid,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => $this->whenLoaded('category', fn() => [
+            'category' => $this->whenLoaded('category', fn () => [
                 'id' => $this->category->uuid,
                 'name' => $this->category->name,
             ]),
-            'task_date' => $this->task_date?->format('M d, Y'),
-            'completed_at' => $this->completed_at?->format('M d, Y h:i A'),
+            'task_date' => new DateTimeResource($this->task_date, includeTime: false)->resolve($request),
             'is_completed' => $this->completed_at !== null,
-            'created_at' => $this->created_at?->format('M d, Y h:i A'),
-            'updated_at' => $this->updated_at?->format('M d, Y h:i A'),
+            'completed_at' => new DateTimeResource($this->completed_at)->resolve($request),
+            'created_at' => new DateTimeResource($this->created_at)->resolve($request),
+            'updated_at' => new DateTimeResource($this->updated_at)->resolve($request),
         ];
     }
 }

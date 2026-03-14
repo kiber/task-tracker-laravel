@@ -95,7 +95,7 @@
                 class="block mt-1 w-full"
                 type="date"
                 name="start_date"
-                :value="old('start_date', $recurringTask['start_date'] ?? '')"
+                :value="old('start_date', $recurringTask['start_date']['datetime'] ?? '')"
             />
             <x-input-error :messages="$errors->get('start_date')" class="mt-2" />
         </div>
@@ -107,7 +107,7 @@
                 class="block mt-1 w-full"
                 type="date"
                 name="end_date"
-                :value="old('end_date', $recurringTask['end_date'] ?? '')"
+                :value="old('end_date', $recurringTask['end_date']['datetime'] ?? '')"
             />
             <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
         </div>

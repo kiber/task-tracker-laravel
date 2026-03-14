@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Actions\Category;
@@ -14,7 +15,7 @@ readonly class GetCategories
 
     public function execute(int $userId): array
     {
-        return $this->categoryCacheService->remember($userId, fn() => Category::query()
+        return $this->categoryCacheService->remember($userId, fn () => Category::query()
             ->where('user_id', $userId)
             ->orderBy('name')
             ->pluck('name', 'uuid')

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Resources;
@@ -41,10 +42,10 @@ class RecurringTaskResource extends JsonResource
             'monthly_day' => $frequency === TaskFrequency::Monthly
                 ? ($this->frequency_config['day'] ?? null)
                 : null,
-            'start_date' => $this->start_date?->format('Y-m-d'),
-            'end_date' => $this->end_date?->format('Y-m-d'),
-            'created_at' => $this->created_at?->format('M d, Y h:i A'),
-            'updated_at' => $this->updated_at?->format('M d, Y h:i A'),
+            'start_date' => new DateTimeResource($this->start_date, includeTime: false)->resolve($request),
+            'end_date' => new DateTimeResource($this->end_date, includeTime: false)->resolve($request),
+            'created_at' => new DateTimeResource($this->created_at)->resolve($request),
+            'updated_at' => new DateTimeResource($this->updated_at)->resolve($request),
         ];
     }
 
@@ -64,7 +65,7 @@ class RecurringTaskResource extends JsonResource
             TaskFrequency::Daily => 'Every day',
             TaskFrequency::Weekdays => 'Mon to Fri',
             TaskFrequency::Weekly => $this->weeklyFrequencyDetails(),
-            TaskFrequency::Monthly => 'Day ' . ($this->frequency_config['day'] ?? '-'),
+            TaskFrequency::Monthly => 'Day '.($this->frequency_config['day'] ?? '-'),
         };
     }
 

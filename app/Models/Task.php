@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Category|null $category
  * @property-read User $user
+ *
  * @method static Builder<static>|Task newModelQuery()
  * @method static Builder<static>|Task newQuery()
  * @method static Builder<static>|Task query()
@@ -35,12 +37,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Task whereTitle($value)
  * @method static Builder<static>|Task whereUpdatedAt($value)
  * @method static Builder<static>|Task whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Task extends Model
 {
-    use HasUuids;
     use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'user_id',

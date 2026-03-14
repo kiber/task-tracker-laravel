@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Database\Seeders;
@@ -6,7 +7,6 @@ namespace Database\Seeders;
 use App\Enums\TaskFrequency;
 use App\Models\RecurringTask;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RecurringTaskSeeder extends Seeder
@@ -22,7 +22,7 @@ class RecurringTaskSeeder extends Seeder
         foreach ($users as $user) {
             $categories = $user->categories;
 
-            for ($i = rand(1, 5); $i <= 10; ++$i) {
+            for ($i = rand(1, 5); $i <= 10; $i++) {
                 $frequency = fake()->randomElement($frequencies);
                 $recurringTask = RecurringTask::factory()
                     ->for($user)

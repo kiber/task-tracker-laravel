@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Database\Factories;
@@ -64,7 +65,7 @@ class RecurringTaskFactory extends Factory
         ]);
     }
 
-    public function withEndDate(string|null $endDate = '+1 year'): static
+    public function withEndDate(?string $endDate = '+1 year'): static
     {
         return $this->state(fn (array $attributes) => [
             'end_date' => $endDate ? now()->modify($endDate) : null,

@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
@@ -27,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $loginRateLimitResponse = function(Request $request) {
+        $loginRateLimitResponse = function (Request $request) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => 'Too many login attempts. Please try again in a few minutes.',
@@ -37,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             return back()
                 ->withInput($request->except('password'))
                 ->withErrors([
-                    'email' => 'Too many login attempts. Please try again in a few minutes.'
+                    'email' => 'Too many login attempts. Please try again in a few minutes.',
                 ]);
         };
 
@@ -50,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // middleware throttle:password-reset-request
-        RateLimiter::for('password-reset-request', function (Request $request) use ($loginRateLimitResponse) {
+        RateLimiter::for('password-reset-request', function (Request $request) {
             return [
                 Limit::perMinute(10)->by($request->ip()),
                 Limit::perMinute(3)->by($request->input('email')),
@@ -58,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // middleware throttle:password-reset
-        RateLimiter::for('password-reset', function (Request $request) use ($loginRateLimitResponse) {
+        RateLimiter::for('password-reset', function (Request $request) {
             return [
                 Limit::perMinute(5)->by($request->ip()),
                 Limit::perMinute(3)->by($request->input('email')),
@@ -79,11 +82,16 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Log DB query for debugging
-//        DB::listen(function (QueryExecuted $query) {
-//            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
-//        });
+        //        DB::listen(function (QueryExecuted $query) {
+        //            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
+        //        });
 
         // To remove parent data from JSON objects
-//        JsonResource::withoutWrapping();
+        //        JsonResource::withoutWrapping();
+
+        Model::shouldBeStrict();
+
+        DB::prohibitDestructiveCommands(app()->isProduction());
+        Date::use(CarbonImmutable::class);
     }
 }

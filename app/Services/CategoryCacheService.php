@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -13,7 +14,7 @@ readonly class CategoryCacheService
     ) {}
 
     /**
-     * @param Closure(): array $callback
+     * @param  Closure(): array  $callback
      */
     public function remember(int $userId, Closure $callback): array
     {
@@ -27,6 +28,6 @@ readonly class CategoryCacheService
 
     private function getKey(int $userId): string
     {
-        return 'categories.user.' . $userId;
+        return 'categories.user.'.$userId;
     }
 }

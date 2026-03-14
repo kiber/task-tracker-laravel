@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $tasks_count
  * @property-read Collection<int, \App\Models\RecurringTask> $recurringTasks
  * @property-read int|null $recurring_tasks_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -42,12 +43,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User wherePassword($value)
  * @method static Builder<static>|User whereRememberToken($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
     use HasUuids;
 
     /**

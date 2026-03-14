@@ -64,14 +64,14 @@
 
                 <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">{{ __('Last 7 Days') }}</p>
+                        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">{{ __('Total Pending') }}</p>
                         <span class="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
-                            {{ __('Completed') }}
+                            {{ __('Pending') }}
                         </span>
                     </div>
                     <div class="mt-4">
-                        <p class="text-3xl font-semibold text-gray-900 dark:text-gray-100">{{ $stats['completed_last_7_days'] }}</p>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('All completed tasks') }}</p>
+                        <p class="text-3xl font-semibold text-gray-900 dark:text-gray-100">{{ $stats['total_pending'] }}</p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Total Pending') }}</p>
                     </div>
                 </div>
 

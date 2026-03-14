@@ -42,8 +42,8 @@
                                 <tr>
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $category['name'] }}</td>
 {{--                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category->description ?: __('No description provided.') }}</td>--}}
-                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['created_at'] ?? '-' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['updated_at'] ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['created_at']['display'] ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category['updated_at']['display'] ?? '-' }}</td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
                                             <a

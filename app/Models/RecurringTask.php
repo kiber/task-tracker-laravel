@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Task> $tasks
  * @property-read int|null $tasks_count
  * @property-read User $user
+ *
  * @method static Builder<static>|RecurringTask newModelQuery()
  * @method static Builder<static>|RecurringTask newQuery()
  * @method static Builder<static>|RecurringTask onlyTrashed()
@@ -52,12 +54,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|RecurringTask whereUuid($value)
  * @method static Builder<static>|RecurringTask withTrashed(bool $withTrashed = true)
  * @method static Builder<static>|RecurringTask withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class RecurringTask extends Model
 {
-    use HasUuids;
     use HasFactory;
+    use HasUuids;
     use SoftDeletes;
 
     protected $fillable = [
@@ -106,12 +109,12 @@ class RecurringTask extends Model
         return $this->hasMany(Task::class);
     }
 
-//    #[Scope]
-//    protected function active(Builder $query, Carbon $date): void
-//    {
-//        $query->where(fn(Builder $query) => $query->whereNull('start_date')
-//            ->orWhere('start_date', '<=', $date));
-//        $query->where(fn(Builder $query) => $query->whereNull('end_date')
-//            ->orWhere('end_date', '>=', $date));
-//    }
+    //    #[Scope]
+    //    protected function active(Builder $query, Carbon $date): void
+    //    {
+    //        $query->where(fn(Builder $query) => $query->whereNull('start_date')
+    //            ->orWhere('start_date', '<=', $date));
+    //        $query->where(fn(Builder $query) => $query->whereNull('end_date')
+    //            ->orWhere('end_date', '>=', $date));
+    //    }
 }

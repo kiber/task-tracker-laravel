@@ -1,9 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Actions\Category\GetCategories;
+use App\Actions\Task\CreateTask;
+use App\Actions\Task\UpdateTask;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
@@ -12,10 +15,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-class TaskController extends Controller
+class TaskController
 {
     public function __construct(
-        private GetCategories $getCategories
+        private readonly GetCategories $getCategories,
+        private readonly CreateTask $createTask,
+        private readonly UpdateTask $updateTask,
     ) {}
 
     /**
@@ -27,7 +32,7 @@ class TaskController extends Controller
         $category = null;
         if ($request->category_id) {
             $category = Category::where('uuid', $request->category_id)->first();
-            if (!$category || $user->cannot('manage', $category)) {
+            if (! $category || $user->cannot('manage', $category)) {
                 throw ValidationException::withMessages(['category' => 'The given category id does not exist.']);
             }
         }
@@ -68,16 +73,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $validatedData = $request->validated();
-
-        if ($request->category_id) {
-            $category = Category::where('uuid', $request->category_id)->first();
-            if (!$category || $request->user()->cannot('manage', $category)) {
-                throw ValidationException::withMessages(['category' => 'The given category id does not exist.']);
-            }
-            $validatedData['category_id'] = $category->id;
-        }
-        $request->user()->tasks()->create($validatedData);
+        $this->createTask->execute($request->validated(), $request->user());
 
         return to_route('tasks.index')->with('success', 'Task created successfully.');
     }
@@ -99,19 +95,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $validatedData = $request->validated();
-
-        if ($request->category_id) {
-            $category = Category::where('uuid', $request->category_id)->first();
-            if (!$category || $request->user()->cannot('manage', $category)) {
-                throw ValidationException::withMessages(['category' => 'The given category id does not exist.']);
-            }
-            $task->category()->associate($category);
-            unset($validatedData['category_id']);
-        }
-
-        $task->fill($validatedData);
-        $task->save();
+        $this->updateTask->execute($request->validated(), $request->user(), $task);
 
         return to_route('tasks.index')->with('success', 'Task updated successfully.');
     }
@@ -137,7 +121,7 @@ class TaskController extends Controller
             'completed_at' => $isCompleting ? now() : null,
         ]);
 
-//        return back()->with('success', $isCompleting ? 'Task marked as completed.' : 'Task marked as incomplete.');
+        //        return back()->with('success', $isCompleting ? 'Task marked as completed.' : 'Task marked as incomplete.');
         return response()->json(['completed' => $isCompleting]);
     }
 }

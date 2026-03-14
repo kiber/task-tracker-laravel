@@ -1,6 +1,6 @@
 @php
     $task ??= null;
-    $taskDate = isset($task['task_date']) ? date('Y-m-d', strtotime($task['task_date'])) : '';
+    $taskDate = isset($task['task_date']) ? $task['task_date']['datetime'] : '';
     $taskDate = old('task_date', $taskDate);
 @endphp
 

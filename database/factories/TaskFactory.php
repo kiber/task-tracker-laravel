@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Database\Factories;
@@ -44,8 +45,9 @@ class TaskFactory extends Factory
 
     public function completed(): static
     {
-        return $this->state(function() {
+        return $this->state(function () {
             $taskDate = fake()->dateTimeBetween('-30 days', 'now');
+
             return [
                 'task_date' => $taskDate,
                 'completed_at' => fake()->dateTimeBetween($taskDate, 'now'),

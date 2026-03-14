@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class DashboardController
 {
     public function index(Request $request)
     {
@@ -13,26 +14,17 @@ class DashboardController extends Controller
         $today = now()->startOfDay();
         $yesterday = $today->copy()->subDay();
         $twoDaysAgo = $today->copy()->subDays(2);
-        $lastSevenDaysStart = $today->copy()->subDays(6);
 
-        $overdueCount = $user->tasks()
-            ->whereNull('completed_at')
-            ->whereDate('task_date', '<', $today)
-            ->count();
-
-        $completedTodayCount = $user->tasks()
-            ->whereNotNull('completed_at')
-            ->whereDate('completed_at', $today)
-            ->count();
-
-        $completedLastSevenDaysCount = $user->tasks()
-            ->whereNotNull('completed_at')
-            ->whereDate('completed_at', '>=', $lastSevenDaysStart)
-            ->count();
-
-        $tasksDueTodayCount = $user->tasks()
-            ->whereDate('task_date', $today)
-            ->count();
+        $stats = $user->tasks()
+            ->toBase()
+            ->selectRaw(
+                'COUNT(CASE WHEN task_date = ? THEN 1 END) as tasks_today,
+                COUNT(CASE WHEN task_date = ? AND completed_at IS NOT NULL THEN 1 END) as completed_today,
+                COUNT(CASE WHEN task_date < ? AND completed_at IS NULL THEN 1 END) as overdue,
+                COUNT(CASE WHEN completed_at IS NULL THEN 1 END) as total_pending',
+                [$today, $today, $today]
+            )
+            ->first();
 
         $recentOverdueTasks = $user->tasks()
             ->with('category')
@@ -50,10 +42,10 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'stats' => [
-                'overdue' => $overdueCount,
-                'completed_today' => $completedTodayCount,
-                'completed_last_7_days' => $completedLastSevenDaysCount,
-                'due_today' => $tasksDueTodayCount,
+                'overdue' => (int) $stats->overdue,
+                'completed_today' => (int) $stats->completed_today,
+                'total_pending' => (int) $stats->total_pending,
+                'due_today' => (int) $stats->tasks_today,
             ],
             'recentOverdueTasks' => $recentOverdueTasks->toResourceCollection()->resolve(),
             'todayTasks' => $todayTasks->toResourceCollection()->resolve(),

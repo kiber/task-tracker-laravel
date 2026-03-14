@@ -58,10 +58,10 @@
                                             <p class="mt-1">{{ $recurringTask['frequency_details'] }}</p>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <p>{{ $recurringTask['start_date'] ? \Carbon\Carbon::parse($recurringTask['start_date'])->format('M d, Y') : __('No start') }}</p>
+                                            <p>{{ $recurringTask['start_date'] ? $recurringTask['start_date']['display'] : __('No start') }}</p>
                                             <p class="mt-1">{{ $recurringTask['end_date'] ? \Carbon\Carbon::parse($recurringTask['end_date'])->format('M d, Y') : __('No end') }}</p>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $recurringTask['created_at'] ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $recurringTask['created_at']['display'] ?? '-' }}</td>
                                         <td class="px-6 py-4">
                                             <div class="flex flex-wrap items-center justify-end gap-2">
                                                 <a

@@ -9,7 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('categories.store') }}" class="space-y-6">
+                    <form method="POST" action="{{ route('categories.store') }}" x-data="{ submitting: false }" @submit="submitting = true" class="space-y-6">
                         @csrf
 
                         @include('categories.partials.form')
@@ -22,8 +22,9 @@
                                 {{ __('Cancel') }}
                             </a>
 
-                            <x-primary-button>
-                                {{ __('Save Category') }}
+                            <x-primary-button ::disabled="submitting">
+                                <span x-show="!submitting">{{ __('Save Category') }}</span>
+                                <span x-show="submitting" x-clock>{{ __('Saving...') }}</span>
                             </x-primary-button>
                         </div>
                     </form>

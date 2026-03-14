@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Console\Commands;
@@ -34,7 +35,7 @@ class ArchiveExpiredRecurringTasks extends Command
             ->delete();
 
         if ($expired > 0) {
-            $this->info('Archived ' . $expired . ' recurring tasks.');
+            $this->info('Archived '.$expired.' recurring tasks.');
         } else {
             $this->info('There are no archived recurring tasks.');
         }

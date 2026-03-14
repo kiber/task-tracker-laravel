@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
@@ -25,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RecurringTask> $recurringTasks
  * @property-read int|null $recurring_tasks_count
  * @property-read User $user
+ *
  * @method static Builder<static>|Category newModelQuery()
  * @method static Builder<static>|Category newQuery()
  * @method static Builder<static>|Category query()
@@ -33,13 +35,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Category whereName($value)
  * @method static Builder<static>|Category whereUpdatedAt($value)
  * @method static Builder<static>|Category whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 #[ObservedBy(CategoryObserver::class)]
 class Category extends Model
 {
-    use HasUuids;
     use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'name',
