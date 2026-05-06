@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\Category\GetCategories;
 use App\Actions\Task\CreateTask;
 use App\Actions\Task\UpdateTask;
+use App\Enums\TaskStatus;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
@@ -42,8 +43,8 @@ class TaskController
 
         $tasksQuery = $user->tasks()
             ->with('category')
-            ->when($request->status === 'completed', fn (Builder $query) => $query->whereNotNull('completed_at'))
-            ->when($request->status === 'incomplete', fn (Builder $query) => $query->whereNull('completed_at'))
+            ->when($request->status === TaskStatus::Completed->value, fn (Builder $query) => $query->whereNotNull('completed_at'))
+            ->when($request->status === TaskStatus::Incomplete->value, fn (Builder $query) => $query->whereNull('completed_at'))
             ->when($request->filled('category_id'), fn (Builder $query) => $query->where('category_id', $category?->id))
             ->when($request->filled('date_from'), fn (Builder $query) => $query->whereDate('task_date', '>=', $request->date_from))
             ->when($request->filled('date_to'), fn (Builder $query) => $query->whereDate('task_date', '<=', $request->date_to))

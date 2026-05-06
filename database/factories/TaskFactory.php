@@ -27,7 +27,7 @@ class TaskFactory extends Factory
             'recurring_task_id' => null,
             'title' => fake()->sentence(rand(3, 8)),
             'description' => fake()->optional(0.7)->paragraph(),
-            'task_date' => fake()->dateTimeBetween('-30 days', '+30 days'),
+            'task_date' => fake()->dateTimeBetween('-30 days', '+30 days')->setTime(0, 0),
             'completed_at' => null,
         ];
     }
@@ -46,7 +46,7 @@ class TaskFactory extends Factory
     public function completed(): static
     {
         return $this->state(function () {
-            $taskDate = fake()->dateTimeBetween('-30 days', 'now');
+            $taskDate = fake()->dateTimeBetween('-30 days', 'now')->setTime(0, 0);
 
             return [
                 'task_date' => $taskDate,
@@ -72,7 +72,7 @@ class TaskFactory extends Factory
     public function overdue(): static
     {
         return $this->state(fn (array $attributes) => [
-            'task_date' => fake()->dateTimeBetween('-60 days', '-1 day'),
+            'task_date' => fake()->dateTimeBetween('-60 days', '-1 day')->setTime(0, 0),
             'completed_at' => null,
         ]);
     }
